@@ -1,0 +1,6 @@
+[submodule "lwip/WIZnet-PICO-LWIP-C"]
+	path = lwip/WIZnet-PICO-LWIP-C
+	url = https://github.com/FusionRTS-Core/WIZnet-PICO-LWIP-C
+[submodule "lwip/lwip-original"]
+	path = lwip/lwip-original
+	url = https://github.com/FusionRTS-Core/lwip-original
