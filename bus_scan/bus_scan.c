@@ -12,7 +12,7 @@
 // 0
 // 1       @
 // 2
-// 3             @
+// 3           @
 // 4
 // 5
 // 6
@@ -24,12 +24,10 @@
 #include "pico/stdlib.h"
 #include "pico/binary_info.h"
 #include "hardware/i2c.h"
+#include "bus_scan.h" // Die neu erstellte Header-Datei einbinden
 
-// I2C reserves some addresses for special purposes. We exclude these from the scan.
-// These are any addresses of the form 000 0xxx or 111 1xxx
-bool reserved_addr(uint8_t addr) {
-    return (addr & 0x78) == 0 || (addr & 0x78) == 0x78;
-}
+// Die Funktion reserved_addr ist jetzt in bus_scan.h deklariert
+// und kann hier verwendet werden, ohne sie erneut definieren zu müssen.
 
 int main() {
     // Enable UART so we can print status output
@@ -38,7 +36,7 @@ int main() {
 #warning i2c/bus_scan example requires a board with I2C pins
     puts("Default I2C pins were not defined");
 #else
-    // This example will use I2C0 on the default SDA and SCL pins (GP4, GP5 on a Pico)
+    // This example will use I2C0 on the default SDA and SCL pins (GP4, GP5 aon a Pico)
     i2c_init(i2c_default, 100 * 1000);
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
@@ -63,13 +61,13 @@ int main() {
         // Skip over any reserved addresses.
         int ret;
         uint8_t rxdata;
-        if (reserved_addr(addr))
+        if (reserved_addr(addr)) // reserved_addr wird jetzt aus bus_scan.h verwendet
             ret = PICO_ERROR_GENERIC;
         else
             ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
 
         printf(ret < 0 ? "." : "@");
-        printf(addr % 16 == 15 ? "\n" : "  ");
+        printf(addr % 16 == 15 ? "\n" : "   ");
     }
     printf("Done.\n");
     return 0;
